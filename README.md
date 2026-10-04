@@ -131,29 +131,12 @@ CloudWatch 1분 지표를 같이 보며 병목을 하나씩 걷어냈습니다. 
 캐시를 넣고 나서 "비로그인 요청은 캐시가 맞으면 DB와 통신하지 않는다"고 적었는데, 로컬 MySQL의
 general log로 세어 보니 요청마다 5개의 문장이 가고 있었습니다.
 
-```
-SET SESSION TRANSACTION READ ONLY
-SET autocommit=0
-COMMIT
-SET autocommit=1
-SET SESSION TRANSACTION READ WRITE
-```
-
 `@Transactional(readOnly = true)`가 붙은 메서드는 SELECT를 하나도 안 해도 들어가는 순간 커넥션을
 빌리고 여닫기 문장을 보냅니다. 캐시 확인이 그 안에 있었습니다.
 
 캐시를 보는 쪽과 DB를 읽는 쪽을 빈 두 개로 나누고, 캐시 쪽에는 트랜잭션을 붙이지 않았습니다.
 조회가 하나뿐인 "내 상태" 메서드도 트랜잭션을 뗐습니다. 묶을 것이 없는데 문장 5개를 더 보내고
 있었기 때문입니다.
-
-| 로그인 요약 1건의 DB 왕복 | before | after |
-|---|---|---|
-| 인증 필터의 역할 조회 | 1 | 0 (Caffeine, USER만 60초) |
-| 회차·신청자 수 공통부 | 4 | 0 (Redis 2초) |
-| 내 신청·결과·매칭 여부 | 3 | 1 (exists 서브쿼리로 합침) |
-| 트랜잭션 여닫기 문장 | 5 | 0 |
-| 기타 | 2.3 | 0 |
-| **합계** | **15.3** | **1.0** |
 
 ---
 
