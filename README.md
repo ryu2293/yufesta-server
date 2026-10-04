@@ -116,7 +116,8 @@ CloudWatch 1분 지표(ALB·ECS·RDS·ElastiCache)를 같이 보며 병목을 �
 | ② | 처리량 천장 약 600 req/s. 앱 CPU 100%, RDS는 31% | 완성된 응답 문자열을 Redis에 캐시 | 600 req/s에서 CPU **100% → 54~70%**, 응답 1.6~3.0s → 4~13ms |
 | ③ | 로그인 요청이 20%뿐인데 용량이 1/3 감소. 로그인 요약 한 건이 DB를 **15.3회** 왕복 | 역할을 메모리에 60초 기억, 내 상태를 쿼리 하나로, 캐시 확인을 트랜잭션 밖으로 | DB 왕복 **15.3 → 1.0회**, 600 req/s에서 CPU 74% → 51%, DB 연결 40 → 18 |
 
-![캐시 전후 CPU](load/graphs/portfolio-cache-before-after-annot.png)
+<img width="1400" height="1172" alt="portfolio-cache-before-after-annot" src="https://github.com/user-attachments/assets/ee083a01-fa3c-4ed6-ba0f-ae29ac16a75b" />
+
 
 > 위는 캐시 전(09-26), 아래는 캐시와 로그인 경로 개선 뒤(09-29)입니다. 주황 띠가 양쪽 모두 같은 600 req/s 구간이고,
 > 파란 선이 분당 요청, 빨간 선이 앱 CPU입니다. 같은 요청량에 CPU만 절반으로 내려갔습니다.
@@ -224,7 +225,8 @@ keepalive는 25초입니다. ALB 유휴 제한 60초보다 짧아야 하고, 운
 
 배포 뒤 SSE 연결 1,000개와 30초 폴링 사용자 100명을 함께 두고 운영자가 회차를 마감·발표했습니다.
 
-![SSE 1,000 연결과 폴링 비교](load/graphs/0930-sse-compare-connections-annot.png)
+<img width="1400" height="520" alt="0930-sse-compare-connections-annot" src="https://github.com/user-attachments/assets/816f7160-883d-489e-81cf-5c9d16513167" />
+
 
 | | SSE | 30초 폴링 |
 |---|---|---|
@@ -262,7 +264,7 @@ keepalive는 25초입니다. ALB 유휴 제한 60초보다 짧아야 하고, 운
 안정 구간을 아는 것만큼 **어떻게 무너지는지**를 아는 것이 중요했습니다. 당일에 그 모양이 보이면
 무엇을 눌러야 하는지 미리 정해 둘 수 있기 때문입니다.
 
-![900 req/s 붕괴](load/graphs/0929-login50-throughput-cpu-annot.png)
+<img width="1400" height="520" alt="0929-login50-throughput-cpu-annot" src="https://github.com/user-attachments/assets/22dd91d7-edba-4361-a3fc-4b8d091050af" />
 
 > 로그인 50% · 900 req/s. 같은 900인데 더 무거운 로그인 100%는 버티고(CPU 97%) 이쪽은 무너졌습니다.
 > 용량이 모자란 것이 아니라 여유가 3%라 작은 흔들림 하나가 한계를 넘깁니다.
@@ -285,7 +287,7 @@ fail-open으로 DB 경로를 타 더 느려짐 → 헬스체크 실패 → ALB�
 
 ## 6. 축제 당일
 
-![당일 요청 수와 CPU](load/graphs/1002-festival-throughput-cpu-annot.png)
+<img width="1400" height="520" alt="1002-festival-throughput-cpu-annot" src="https://github.com/user-attachments/assets/14193c93-94e9-456b-a051-5b1ad6376c6d" />
 
 > 파란 선이 분당 요청(왼쪽 축), 빨간 선이 앱 CPU(오른쪽 축). 발표 세 번에 요청이 30배로 뛰어도 CPU는 16% 이하입니다.
 > 하루 중 CPU가 가장 높았던 1분은 발표가 아니라 23:20이었습니다. 분실물 사진 한 장을 서버가 동기로 리사이즈하느라
