@@ -5,9 +5,10 @@
 축제에서 같이 공연 볼 사람을 찾아 주자는 아이디어에서 시작했습니다. 하루짜리 서비스라
 당일 장애는 복구할 기회가 없고, 매칭 발표 시각에는 모든 사용자가 동시에 몰립니다.
 그래서 짐작 대신 부하 테스트로 병목을 찾고, 하나를 고칠 때마다 같은 조건으로 다시 쟀습니다.
+> 
+<img width="1600" height="900" alt="yufesta-hero" src="https://github.com/user-attachments/assets/a348a28b-d3e9-42a0-a251-bcd851d4d46b" />
 
-<!-- 이미지 ① 히어로: ~/261002-yufesta/yufesta-hero.png 를 GitHub 이슈/PR에 드래그해 올린 뒤 생성되는 주소로 교체 -->
-<img width="800" alt="YU FESTA" src="https://github.com/user-attachments/assets/REPLACE-hero" />
+
 
 🌐 [yufesta.com](https://yufesta.com) · 📊 [측정 기록 전체](load/README.md) · ✍️ [기술 블로그](https://velog.io/@ryu2293/posts)
 
@@ -115,10 +116,10 @@ CloudWatch 1분 지표(ALB·ECS·RDS·ElastiCache)를 같이 보며 병목을 �
 | ② | 처리량 천장 약 600 req/s. 앱 CPU 100%, RDS는 31% | 완성된 응답 문자열을 Redis에 캐시 | 600 req/s에서 CPU **100% → 54~70%**, 응답 1.6~3.0s → 4~13ms |
 | ③ | 로그인 요청이 20%뿐인데 용량이 1/3 감소. 로그인 요약 한 건이 DB를 **15.3회** 왕복 | 역할을 메모리에 60초 기억, 내 상태를 쿼리 하나로, 캐시 확인을 트랜잭션 밖으로 | DB 왕복 **15.3 → 1.0회**, 600 req/s에서 CPU 74% → 51%, DB 연결 40 → 18 |
 
-![캐시 전후 CPU](load/graphs/portfolio-cache-before-after.png)
+![캐시 전후 CPU](load/graphs/portfolio-cache-before-after-annot.png)
 
-> 위는 캐시 전(09-26), 아래는 캐시와 로그인 경로 개선 뒤(09-29)의 같은 600 req/s 구간입니다.
-> 파란 선이 분당 요청, 빨간 선이 앱 CPU입니다.
+> 위는 캐시 전(09-26), 아래는 캐시와 로그인 경로 개선 뒤(09-29)입니다. 주황 띠가 양쪽 모두 같은 600 req/s 구간이고,
+> 파란 선이 분당 요청, 빨간 선이 앱 CPU입니다. 같은 요청량에 CPU만 절반으로 내려갔습니다.
 
 ### ①에서 배운 것 — 병목은 CPU가 아니었다
 
@@ -223,7 +224,7 @@ keepalive는 25초입니다. ALB 유휴 제한 60초보다 짧아야 하고, 운
 
 배포 뒤 SSE 연결 1,000개와 30초 폴링 사용자 100명을 함께 두고 운영자가 회차를 마감·발표했습니다.
 
-![SSE 1,000 연결과 폴링 비교](load/graphs/0930-sse-compare-connections.png)
+![SSE 1,000 연결과 폴링 비교](load/graphs/0930-sse-compare-connections-annot.png)
 
 | | SSE | 30초 폴링 |
 |---|---|---|
@@ -261,7 +262,7 @@ keepalive는 25초입니다. ALB 유휴 제한 60초보다 짧아야 하고, 운
 안정 구간을 아는 것만큼 **어떻게 무너지는지**를 아는 것이 중요했습니다. 당일에 그 모양이 보이면
 무엇을 눌러야 하는지 미리 정해 둘 수 있기 때문입니다.
 
-![900 req/s 붕괴](load/graphs/0929-login50-throughput-cpu.png)
+![900 req/s 붕괴](load/graphs/0929-login50-throughput-cpu-annot.png)
 
 > 로그인 50% · 900 req/s. 같은 900인데 더 무거운 로그인 100%는 버티고(CPU 97%) 이쪽은 무너졌습니다.
 > 용량이 모자란 것이 아니라 여유가 3%라 작은 흔들림 하나가 한계를 넘깁니다.
@@ -284,9 +285,11 @@ fail-open으로 DB 경로를 타 더 느려짐 → 헬스체크 실패 → ALB�
 
 ## 6. 축제 당일
 
-![당일 요청 수와 CPU](load/graphs/1002-festival-throughput-cpu.png)
+![당일 요청 수와 CPU](load/graphs/1002-festival-throughput-cpu-annot.png)
 
 > 파란 선이 분당 요청(왼쪽 축), 빨간 선이 앱 CPU(오른쪽 축). 발표 세 번에 요청이 30배로 뛰어도 CPU는 16% 이하입니다.
+> 하루 중 CPU가 가장 높았던 1분은 발표가 아니라 23:20이었습니다. 분실물 사진 한 장을 서버가 동기로 리사이즈하느라
+> 8초를 썼고, 0.5 vCPU에서 75%까지 올랐습니다. "이미지 처리 비동기화"를 개선 후보에 둔 이유가 이 1분입니다.
 
 | 발표 | 직전 분 → 발표 분 req/min | 발표 분 p95 / p99 | 캐시 적중률 | DB 연결 | 앱 CPU 최대 |
 |---|---|---|---|---|---|
