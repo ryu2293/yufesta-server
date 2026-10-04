@@ -5,12 +5,11 @@
 축제에서 같이 공연 볼 사람을 찾아 주자는 아이디어에서 시작했습니다. 하루짜리 서비스라
 당일 장애는 복구할 기회가 없고, 매칭 발표 시각에는 모든 사용자가 동시에 몰립니다.
 그래서 짐작 대신 부하 테스트로 병목을 찾고, 하나를 고칠 때마다 같은 조건으로 다시 쟀습니다.
-> 
 <img width="1600" height="900" alt="yufesta-hero" src="https://github.com/user-attachments/assets/a348a28b-d3e9-42a0-a251-bcd851d4d46b" />
 
 
 
-🌐 [yufesta.com](https://yufesta.com) · 📊 [측정 기록 전체](load/README.md) · ✍️ [기술 블로그](https://velog.io/@ryu2293/posts)
+🌐 [yufesta.com](https://yufesta.com) · ✍️ [기술 블로그](https://velog.io/@ryu2293/posts)
 
 ---
 
@@ -105,8 +104,8 @@ flowchart LR
 
 ## 2. 부하 테스트가 바꾼 결정 세 가지
 
-NFR은 "발표 직후 1,000명이 결과를 조회해도 p95 1초"였습니다. k6로 그 순간을 재현하고,
-CloudWatch 1분 지표(ALB·ECS·RDS·ElastiCache)를 같이 보며 병목을 하나씩 걷어냈습니다.
+"발표 직후 1,000명이 결과를 조회해도 p95 1초"였습니다. k6로 그 순간을 재현하고,
+CloudWatch 1분 지표를 같이 보며 병목을 하나씩 걷어냈습니다.
 한 번에 하나만 바꾸고, 바꾼 뒤 **같은 조건으로 다시 쟀습니다.**
 
 | 단계 | 측정에서 본 것 | 바꾼 것 | 재측정 |
