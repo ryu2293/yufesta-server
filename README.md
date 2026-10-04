@@ -7,7 +7,7 @@
 
 <img width="1600" height="900" alt="yufesta-hero" src="https://github.com/user-attachments/assets/a348a28b-d3e9-42a0-a251-bcd851d4d46b" />
 
-🌐 [yufesta.com](https://yufesta.com) · ✍️ [기술 블로그](https://velog.io/@ryu2293/posts)
+🌐 [yufesta.com](https://yufesta-web.vercel.app) · ✍️ [기술 블로그](https://velog.io/@ryu2293/posts)
 
 ---
 
