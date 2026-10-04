@@ -18,17 +18,8 @@
 발표를 빨리 보여 주는 것, 그리고 운영 중 어떤 상황이 와도 서버를 다시 띄우지 않고 대응하는 것.
 축제 전에 숫자로 확인해 두는 것이 목표였습니다.
 
-```mermaid
-flowchart LR
-    U[브라우저] -->|HTTPS| ALB
-    ALB --> A[ECS Fargate · 태스크 A]
-    ALB --> B[ECS Fargate · 태스크 B]
-    A & B --> R[(ElastiCache Valkey<br/>응답 캐시 · Pub/Sub)]
-    A & B --> M[(RDS MySQL 8.4)]
-    A -. SSE .-> U
-    B -. SSE .-> U
-    S[RoundScheduler 10초] --> A
-```
+<img width="3200" height="2120" alt="yufesta-architecture" src="https://github.com/user-attachments/assets/826787be-c413-459a-b7b7-ec5335d07bbe" />
+
 
 > 회차 마감·발표는 태스크 두 개 중 하나의 스케줄러가 DB 행 잠금으로 한 번만 실행하고,
 > 그 결과는 Redis Pub/Sub로 두 태스크의 SSE 연결 전체에 퍼집니다.
